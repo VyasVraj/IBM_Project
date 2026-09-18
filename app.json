@@ -1,0 +1,339 @@
+{
+  "name": "MindGuard AI",
+  "id": "mindguard-ai",
+  "version": "1.0.0",
+  "description": "Mental Health Awareness & Suicide Prevention Agent — an agentic AI platform providing empathetic mental health awareness, early distress detection, grounded AI conversation, risk-aware prevention support, and safe escalation to human crisis resources. This application is an educational and awareness support tool, not a medical service or replacement for professional mental health care.",
+  "problem_statement": "Agentic AI for Mental Health Awareness & Suicide Prevention",
+  "hackathon": "Gujarat Hackathon 2026",
+  "theme": "Agentic AI using IBM Technologies",
+
+  "application": {
+    "type": "frontend-spa",
+    "framework": "react",
+    "framework_version": "19",
+    "build_tool": "vite",
+    "build_tool_version": "8",
+    "language": "javascript",
+    "entry_point": "index.html",
+    "source_root": "src",
+    "main_component": "src/App.jsx",
+    "build_output": "dist",
+    "scripts": {
+      "dev": "vite",
+      "build": "vite build",
+      "preview": "vite preview",
+      "lint": "oxlint"
+    },
+    "styling": "tailwindcss"
+  },
+
+  "ibm_technologies": {
+    "ibm_granite": {
+      "implemented": true,
+      "service_file": "src/services/graniteService.js",
+      "model": "ibm/granite-13b-instruct-v2",
+      "platform": "IBM watsonx.ai",
+      "endpoint": "https://us-south.ml.cloud.ibm.com/ml/v1/text/generation",
+      "authentication": "IBM Cloud IAM — API key exchanged for Bearer token",
+      "config": {
+        "project_id": "${VITE_IBM_PROJECT_ID}",
+        "api_key": "${VITE_IBM_API_KEY}"
+      },
+      "parameters": {
+        "decoding_method": "greedy",
+        "max_new_tokens": 512,
+        "min_new_tokens": 10,
+        "temperature": 0.7
+      },
+      "capabilities": [
+        "natural-language-understanding",
+        "multilingual-reasoning",
+        "empathetic-response-generation",
+        "risk-aware-conversation",
+        "grounded-response-from-context",
+        "mental-health-psychoeducation",
+        "crisis-resource-provision"
+      ],
+      "note": "Currently operates in simulation mode with local fallback. Production requires valid IBM Cloud credentials in environment variables."
+    },
+    "ibm_langflow": {
+      "implemented": true,
+      "service_file": "src/services/langflowService.js",
+      "config": {
+        "base_url": "${VITE_LANGFLOW_BASE}",
+        "flow_id": "${VITE_LANGFLOW_FLOW_ID}",
+        "token": "${VITE_LANGFLOW_TOKEN}"
+      },
+      "workflows": [
+        {
+          "name": "mental-health-chat",
+          "description": "Core mental health conversational workflow. Routes user messages through IBM Granite with mental health context and safety guardrails.",
+          "endpoint": "/lf/{flow_id}/api/v1/run/chat"
+        },
+        {
+          "name": "rag-query",
+          "description": "Retrieval-Augmented Generation workflow for evidence-based mental health information retrieval.",
+          "endpoint": "/lf/{flow_id}/api/v1/run/rag"
+        },
+        {
+          "name": "journal-analysis",
+          "description": "Emotional pattern analysis workflow for user journal entries.",
+          "endpoint": "/lf/{flow_id}/api/v1/run/journal"
+        }
+      ],
+      "note": "Currently operates in simulation mode. Production requires a deployed Langflow instance and valid flow credentials."
+    },
+    "ibm_orchestrate": {
+      "implemented": true,
+      "service_file": "src/services/orchestrateService.js",
+      "config": {
+        "base_url": "${VITE_ORCHESTRATE_BASE}",
+        "api_key": "${VITE_ORCHESTRATE_KEY}"
+      },
+      "workflows": [
+        {
+          "name": "crisis-escalation",
+          "description": "Automatically routes high-risk users to crisis intervention resources, shows emergency banners, and suggests helplines when serious distress signals are detected.",
+          "trigger": "risk_level == high"
+        },
+        {
+          "name": "wellness-reminder",
+          "description": "Sends scheduled wellness check-in reminders to encourage consistent self-care engagement."
+        },
+        {
+          "name": "weekly-wellness-report",
+          "description": "Generates a personalized weekly wellness summary including mood trends, stress analysis, and top recommendations."
+        }
+      ],
+      "note": "Currently operates in simulation mode. Production requires valid IBM Orchestrate credentials."
+    }
+  },
+
+  "rag": {
+    "implemented": true,
+    "service_file": "src/services/ragService.js",
+    "pipeline": "retrieve-augment-generate",
+    "knowledge_base": {
+      "type": "simulated-vector-store",
+      "documents": [
+        "WHO Mental Health Report 2022",
+        "Mindfulness-Based Stress Reduction (MBSR)",
+        "Cognitive Behavioral Therapy Guide",
+        "Suicide Prevention Guidelines",
+        "Evidence-Based Breathing Techniques",
+        "Sleep and Mental Health Research",
+        "Exercise as Mental Health Treatment"
+      ],
+      "categories": ["awareness", "mindfulness", "therapy", "crisis", "techniques", "sleep", "exercise"]
+    },
+    "retrieval": {
+      "method": "keyword-and-relevance-scoring",
+      "top_k": 3
+    },
+    "note": "Production implementation should use a real vector database (e.g., IBM Watson Discovery, Chroma, or Pinecone) with proper text embeddings. Current implementation uses simulated similarity scoring."
+  },
+
+  "agentic_architecture": {
+    "orchestration_pattern": "coordinated-multi-agent",
+    "workflow": "Monitor → Detect → Analyze → Risk-Assess → Prevent → Recommend → Escalate",
+    "agents": [
+      {
+        "id": "awareness-education-agent",
+        "name": "Awareness & Education Agent",
+        "description": "Provides evidence-based mental health awareness information, psychoeducation, mindfulness resources, coping strategies, and self-care guidance.",
+        "implemented_in": "src/services/graniteService.js",
+        "capabilities": [
+          "mental-health-psychoeducation",
+          "evidence-based-coping-strategies",
+          "mindfulness-and-breathing-techniques",
+          "sleep-hygiene-guidance",
+          "stress-management-resources"
+        ],
+        "safety_note": "Does not present as a medical professional. Does not diagnose conditions."
+      },
+      {
+        "id": "conversation-empathy-agent",
+        "name": "Conversation & Empathy Agent",
+        "description": "Maintains empathetic, non-judgmental supportive conversation using IBM Granite. Listens actively to user concerns and validates emotions using compassionate language.",
+        "implemented_in": "src/services/graniteService.js",
+        "capabilities": [
+          "active-listening",
+          "emotional-validation",
+          "supportive-non-judgmental-responses",
+          "multilingual-conversation"
+        ],
+        "safety_note": "Clearly communicates it is not a replacement for professional mental health care."
+      },
+      {
+        "id": "distress-detection-rag-agent",
+        "name": "Distress Detection & RAG Agent",
+        "description": "Retrieves relevant trusted mental health information using the RAG pipeline and identifies possible distress signals from user-provided conversation inputs using keyword and semantic analysis.",
+        "implemented_in": "src/services/ragService.js",
+        "capabilities": [
+          "retrieval-augmented-generation",
+          "distress-signal-identification",
+          "emotion-detection",
+          "evidence-based-context-retrieval"
+        ],
+        "safety_note": "Does not claim to diagnose any mental health disorder. Identifies signals only."
+      },
+      {
+        "id": "risk-assessment-agent",
+        "name": "Risk Assessment Agent",
+        "description": "Evaluates safety-related signals based on defined keyword and pattern analysis. Classifies risk as Low, Medium, or High and triggers appropriate system responses. Uses conservative escalation for any detected high-risk indicators.",
+        "implemented_in": "src/services/graniteService.js",
+        "capabilities": [
+          "keyword-based-risk-classification",
+          "multi-level-risk-scoring",
+          "sentiment-analysis",
+          "conservative-escalation-triggering"
+        ],
+        "risk_levels": ["low", "medium", "high"],
+        "safety_note": "Does not make clinical diagnoses. Does not guarantee suicide prediction or prevention. Escalates conservatively when serious signals are detected."
+      },
+      {
+        "id": "prevention-recommendation-agent",
+        "name": "Prevention & Recommendation Agent",
+        "description": "Suggests appropriate low-risk coping strategies, self-care actions, and professional support options grounded in retrieved knowledge base content.",
+        "implemented_in": "src/services/graniteService.js",
+        "capabilities": [
+          "coping-strategy-recommendation",
+          "professional-support-referral",
+          "grounded-response-generation",
+          "context-aware-recommendations"
+        ],
+        "safety_note": "Encourages professional support. Does not prescribe treatments or medications."
+      },
+      {
+        "id": "human-support-escalation-agent",
+        "name": "Human Support & Escalation Agent",
+        "description": "Provides international helpline and crisis resource information. Encourages immediate human assistance when high-risk signals are detected. Uses IBM Orchestrate crisis-escalation workflow in production.",
+        "implemented_in": "src/services/orchestrateService.js",
+        "capabilities": [
+          "crisis-helpline-provision",
+          "emergency-banner-activation",
+          "international-crisis-resource-navigation",
+          "orchestrate-crisis-workflow-trigger"
+        ],
+        "crisis_resources": [
+          "988 Suicide & Crisis Lifeline (US) — Call or text 988",
+          "Crisis Text Line — Text HOME to 741741",
+          "International Association for Suicide Prevention — iasp.info",
+          "Samaritans (UK) — 116 123",
+          "iCall (India) — 9152987821",
+          "Beyond Blue (Australia) — 1300 22 4636"
+        ],
+        "safety_note": "Never attempts to replace emergency services or professional mental health care."
+      },
+      {
+        "id": "orchestrator",
+        "name": "Orchestrator",
+        "description": "Coordinates all specialized agents. Routes user inputs to the appropriate capability. Maintains conversation context. Applies safety rules before generating final responses. Integrates IBM Langflow workflow routing.",
+        "implemented_in": "src/services/langflowService.js",
+        "capabilities": [
+          "multi-agent-coordination",
+          "context-maintenance",
+          "safety-rule-enforcement",
+          "langflow-workflow-routing",
+          "agent-response-composition"
+        ]
+      }
+    ]
+  },
+
+  "pages": {
+    "home": "/",
+    "about": "/about",
+    "features": "/features",
+    "chat": "/chat",
+    "mood_tracker": "/mood-tracker",
+    "rag_knowledge": "/rag",
+    "dashboard": "/dashboard",
+    "user_dashboard": "/user-dashboard",
+    "resources": "/resources",
+    "emergency": "/emergency",
+    "journal": "/journal",
+    "contact": "/contact",
+    "login": "/login"
+  },
+
+  "capabilities": [
+    "mental-health-awareness-and-education",
+    "early-distress-signal-detection",
+    "empathetic-ai-conversation",
+    "retrieval-augmented-generation",
+    "risk-aware-prevention-support",
+    "crisis-escalation-and-helpline-connection",
+    "mood-tracking-and-trend-analysis",
+    "journal-emotional-pattern-analysis",
+    "burnout-prediction-indicators",
+    "weekly-wellness-reporting",
+    "evidence-based-coping-techniques",
+    "geospatial-risk-awareness",
+    "ibm-granite-grounded-responses",
+    "ibm-langflow-workflow-orchestration",
+    "ibm-orchestrate-crisis-routing",
+    "agentic-multi-agent-coordination"
+  ],
+
+  "environment_variables": {
+    "VITE_IBM_PROJECT_ID": "IBM watsonx.ai project identifier",
+    "VITE_IBM_API_KEY": "IBM Cloud API key for IAM authentication",
+    "VITE_LANGFLOW_BASE": "Deployed Langflow instance base URL",
+    "VITE_LANGFLOW_FLOW_ID": "Target Langflow flow identifier",
+    "VITE_LANGFLOW_TOKEN": "Langflow authentication token",
+    "VITE_ORCHESTRATE_BASE": "IBM Orchestrate API base URL",
+    "VITE_ORCHESTRATE_KEY": "IBM Orchestrate API key",
+    "note": "No secrets are stored in this file. All credentials must be configured in environment variables. Never commit .env files to version control."
+  },
+
+  "safety": {
+    "classification": "awareness-and-support-tool",
+    "not_a_medical_service": true,
+    "not_a_replacement_for_professional_care": true,
+    "does_not_diagnose": true,
+    "does_not_prescribe": true,
+    "does_not_guarantee_prevention": true,
+    "does_not_autonomously_intervene": true,
+    "conservative_escalation": true,
+    "crisis_resources_always_available": true,
+    "disclaimer": "MindGuard AI is an educational awareness and support tool. It does not provide medical advice, diagnoses, or treatment. If you are experiencing a mental health crisis, please contact emergency services or a qualified mental health professional immediately.",
+    "safety_principles": [
+      "Always provide crisis helplines when high-risk signals are detected",
+      "Never claim to prevent suicide or guarantee outcomes",
+      "Always recommend professional mental health care for clinical concerns",
+      "Use conservative escalation — when in doubt, escalate",
+      "Clearly communicate the tool's limitations in every session",
+      "Never leave a high-risk user without access to crisis resources"
+    ]
+  },
+
+  "grounded_ai": {
+    "approach": "retrieval-augmented-generation",
+    "description": "AI responses are grounded in retrieved evidence-based mental health content from the application knowledge base, not generic model outputs. User context (emotion, risk level, conversation history, mood data) is injected into IBM Granite prompts to generate farm-and-context-specific responses.",
+    "context_sources": [
+      "WHO mental health guidelines",
+      "Evidence-based coping strategies",
+      "Clinical breathing and grounding techniques",
+      "Suicide prevention guidelines",
+      "Sleep and exercise mental health research",
+      "Cognitive Behavioral Therapy principles",
+      "International crisis helpline directory"
+    ]
+  },
+
+  "metadata": {
+    "created_at": "2026-09-11",
+    "license": "MIT",
+    "repository_type": "frontend-spa",
+    "deployment_target": "IBM Cloud / static hosting",
+    "deployment_note": "Vite SPA. Run 'vite build' to generate static assets in dist/. Deploy dist/ to IBM Cloud Object Storage, IBM Code Engine, or any static host. No server-side runtime required for the frontend.",
+    "current_mode": "simulation",
+    "production_requirements": [
+      "Configure VITE_IBM_PROJECT_ID and VITE_IBM_API_KEY for IBM Granite",
+      "Deploy a Langflow instance and configure VITE_LANGFLOW_* variables",
+      "Configure VITE_ORCHESTRATE_* for IBM Orchestrate crisis workflows",
+      "Replace simulation mode flags in service files with production API calls"
+    ]
+  }
+}
